@@ -35,5 +35,4 @@ public class WebfuxRestController {
                 "</COUPONINFO_OUT>";
         return xml;
     }
-
 }
