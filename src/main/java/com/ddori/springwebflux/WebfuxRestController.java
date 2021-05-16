@@ -8,7 +8,6 @@ import reactor.core.publisher.Mono;
 
 @RestController
 public class WebfuxRestController {
-
     @GetMapping("/flux")
     public void sendFlux() {
         XmlWebClient coopMktApi = new XmlWebClient();
