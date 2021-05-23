@@ -13,16 +13,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NoArgsConstructor
 @Getter
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name="COUPONINFO_OUT", namespace = "http://gsapi.m2i.kr/")
+@XmlRootElement(name="WEBCLIENT_TEST", namespace = "http://ddori.webflux.kr/")
 public class XmlResponse {
-    @XmlElement(name = "RESULTCODE", namespace = "http://gsapi.m2i.kr/")
+    @XmlElement(name = "RESULTCODE", namespace = "http://ddori.webflux.kr/")
     String resultCode;
-    @XmlElement(name = "RESULTMSG",  namespace = "http://gsapi.m2i.kr/")
+    @XmlElement(name = "RESULTMSG",  namespace = "http://ddori.webflux.kr/")
     String resultMsg;
+
+    @XmlElement(name = "PARAMETER",  namespace = "http://ddori.webflux.kr/")
+    String parameter;
 
 
     @Override
     public String toString() {
-        return String.format("resultCode:%s,resultMsg:%s", resultCode, resultMsg);
+        return String.format("resultCode:%s,resultMsg:%s,parameter:%s", resultCode, resultMsg,parameter);
     }
 }

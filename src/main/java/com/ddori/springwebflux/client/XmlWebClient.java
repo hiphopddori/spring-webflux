@@ -21,13 +21,20 @@ public class XmlWebClient {
         return sendMono(body,"localhost:8090/response/xml");
     }
     */
-    public Mono<String> findServiceCouponInfo() {
-        Object body = String.class;
+    public Mono findServiceCouponInfo(Object body) {
+        //Object body = String.class;
         //return sendMono(body,"https://gorest.co.in/public-api/users/123/posts.xml");
-        return sendMono(body,"localhost:8090/response/xml");
+        return sendMono(body,"localhost:8020/response/xml");
+    }
+
+    public Mono findServiceByParameter(Object body,int idx) {
+        //Object body = String.class;
+        //return sendMono(body,"https://gorest.co.in/public-api/users/123/posts.xml");
+        return sendMono(body,"localhost:8020/response/xml/parameter/"+ idx);
     }
 
     private Mono sendMono(Object body, String url) {
+
         return WebClient.builder()
                 .build()
                 .get()
@@ -35,16 +42,12 @@ public class XmlWebClient {
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE)
                 .accept(MediaType.APPLICATION_XML)
                 .retrieve()
+                /*
                 .onStatus(HttpStatus::is2xxSuccessful, response -> {
                     //String.format("xmlSample onStatus " + response.toString());
                     System.out.println(String.format("xmlSample onStatus " + response.toString()));
                     return Mono.empty();
-                    /*
-                    return Mono.error(new IllegalStateException(
-                            String.format("Failed! %s", "TEST")
-                    ));
-                     */
-                })
+                })*/
                 .bodyToMono((Class)body)
                 .onErrorMap( e -> {
                     return e;
