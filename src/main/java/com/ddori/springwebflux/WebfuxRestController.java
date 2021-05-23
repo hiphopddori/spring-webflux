@@ -3,12 +3,14 @@ package com.ddori.springwebflux;
 import com.ddori.springwebflux.client.XmlWebClient;
 import com.ddori.springwebflux.vo.xml.XmlResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+@Log4j2
 @RequiredArgsConstructor
 @RestController
 public class WebfuxRestController {
@@ -16,26 +18,20 @@ public class WebfuxRestController {
 
     private final WebfluxService webfluxService;
 
-    @GetMapping("/fluxs")
-    public void sendFluxex() {
-        webfluxService.findServices();
+    @GetMapping("/flux/test")
+    public void fluxTest() {
+        webfluxService.multiMonoToFlux();
     }
 
-    @GetMapping("/flux")
-    public void sendFlux() {
+    @GetMapping("/mono/test")
+    public void monoTest() {
         XmlWebClient xmlWebClient = new XmlWebClient();
-        /*
-        Mono<XmlResponse> subscript =  coopMktApi.findServiceCouponInfo();
-        subscript.subscribe(
-                x -> System.out.println("########## next: " + x.toString()),
-                err -> err.printStackTrace());
-        System.out.println("####완료");
-         */
+
         Mono<String> subscript =  xmlWebClient.findServiceCouponInfo(String.class);
         subscript.subscribe(
-                x -> System.out.println("########## next: " + x),
+                x -> log.debug(String.format("########## next: %s", x)),
                 err -> err.printStackTrace());
-        System.out.println("####완료");
+        log.debug("####완료");
     }
 
     @GetMapping("/response/xml/parameter/{idx}")
@@ -48,14 +44,12 @@ public class WebfuxRestController {
                 System.out.println(exception.getMessage());
             }
         }
-        System.out.println("WebFlux Server[" + String.valueOf(idx) + "] Called");
+        log.debug("server Called : parameter = " + String.valueOf(idx));
         String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
                 "<WEBCLIENT_TEST xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns=\"http://ddori.webflux.kr/\">" +
                 "  <RESULTCODE>00</RESULTCODE>" +
                 "  <PARAMETER>" + String.valueOf(idx) + "</PARAMETER>" +
                 "  <RESULTMSG>처리완료</RESULTMSG>" +
-                //"  <COMP_NAME>60계치킨</COMP_NAME>" +
-                //"  <COUPONNAME>양념치킨</COUPONNAME>" +
                 "</WEBCLIENT_TEST>";
         return xml;
     }
@@ -63,7 +57,7 @@ public class WebfuxRestController {
 
     @GetMapping("/response/xml")
     public String getXml() {
-        System.out.println("WebFlux Server Called");
+        log.debug("server Called");
         try {
             Thread.sleep(1000);
         } catch(Exception exception) {
@@ -71,11 +65,9 @@ public class WebfuxRestController {
         }
 
         String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-                "<COUPONINFO_OUT xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns=\"http://gsapi.m2i.kr/\">" +
+                "<WEBCLIENT_TEST xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns=\"http://ddori.webflux.kr/\">" +
                 "  <RESULTCODE>00</RESULTCODE>" +
                 "  <RESULTMSG>처리완료</RESULTMSG>" +
-                //"  <COMP_NAME>60계치킨</COMP_NAME>" +
-                //"  <COUPONNAME>양념치킨</COUPONNAME>" +
                 "</COUPONINFO_OUT>";
         return xml;
     }
